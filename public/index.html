@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netlify Web Deployer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🚀 Netlify Web Deployer</h1>
+  </header>
+
+  <main>
+    <form id="deployForm" enctype="multipart/form-data">
+      <label>Nama Domain (tanpa .netlify.app):</label>
+      <input type="text" name="domain" placeholder="contoh: websaya" required />
+
+      <label>Pilih file ZIP atau HTML:</label>
+      <input type="file" name="file" accept=".zip,.html" required />
+
+      <button type="submit">Deploy Sekarang</button>
+    </form>
+
+    <div id="result"></div>
+  </main>
+
+  <footer>
+    <p>© 2025 Kevv Mds | Powered by Netlify Functions</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById("deployForm");
+    const resultDiv = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      resultDiv.innerHTML = "<p>⏳ Sedang upload...</p>";
+
+      const formData = new FormData(form);
+      const response = await fetch("/.netlify/functions/deploy", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.error) {
+        resultDiv.innerHTML = `<p style='color:red'>❌ ${data.error}</p>`;
+      } else {
+        resultDiv.innerHTML = `
+          <p>✅ Berhasil deploy!</p>
+          <a href="${data.url}" target="_blank">${data.url}</a>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
