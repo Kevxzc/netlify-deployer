@@ -38,7 +38,7 @@
       resultDiv.innerHTML = "<p>⏳ Sedang upload...</p>";
 
       const formData = new FormData(form);
-      const response = await fetch("/.netlify/functions/deploy", {
+      const response = await fetch("/.netlify/functions/deploy.js", {
         method: "POST",
         body: formData,
       });
